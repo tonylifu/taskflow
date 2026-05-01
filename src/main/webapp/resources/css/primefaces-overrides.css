@@ -184,3 +184,101 @@
     border: 0 !important;
     background: transparent !important;
 }
+
+/* ─── Search input — passthrough <input jsf:> doesn't inherit form-input
+       sizing the way h:inputText does. Force it to behave. ──────────────── */
+
+.filters__search-input,
+input.filters__search-input {
+    height: auto !important;
+    box-shadow: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+/* Strip the default browser styling on type="search" (rounded corners,
+   inner cancel button on Safari) so it matches the rest of the form-inputs. */
+input[type="search"].filters__search-input::-webkit-search-decoration,
+input[type="search"].filters__search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+/* ─── "+ New Task" button — strip PrimeFaces' .ui-button chrome that
+       appears as a stray white box when h:commandButton is AJAX-wired. ── */
+
+.task-list__create-btn,
+.task-list__create-btn.ui-button,
+.btn.ui-button {
+    background: var(--accent) !important;
+    color: var(--slate-950) !important;
+    border: 1px solid var(--accent) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    padding: 0.55rem 1.15rem !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.task-list__create-btn:hover,
+.task-list__create-btn.ui-button:hover,
+.btn.ui-button:hover {
+    background: var(--accent-hover) !important;
+    border-color: var(--accent-hover) !important;
+}
+
+/* PrimeFaces sometimes wraps command components in a span.ui-button-text —
+   neutralise that wrapper so the button label sits flush. */
+.task-list__create-btn .ui-button-text,
+.btn .ui-button-text {
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    color: inherit !important;
+    font: inherit !important;
+}
+
+/* Same neutralisation for ghost / danger / icon variants so they don't
+   inherit PF's button chrome either. */
+.btn--ghost.ui-button {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border) !important;
+}
+.btn--ghost.ui-button:hover {
+    background: var(--surface-2) !important;
+    color: var(--text-primary) !important;
+}
+.btn--danger.ui-button {
+    background: var(--danger) !important;
+    color: white !important;
+    border-color: var(--danger) !important;
+}
+.btn--danger.ui-button:hover {
+    background: var(--danger-hover) !important;
+    border-color: var(--danger-hover) !important;
+}
+.btn-icon.ui-button {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0.35rem !important;
+    color: var(--text-muted) !important;
+}
+.btn-icon.ui-button:hover {
+    color: var(--text-primary) !important;
+    background: var(--surface-2) !important;
+}
+.btn-icon--danger.ui-button:hover {
+    color: var(--danger) !important;
+}
+
+/* h:commandLink renders as <a>; if it sits next to a button in a flex row,
+   match its baseline to the button so vertical centering is clean. */
+a.btn,
+a.btn-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+}

@@ -32,12 +32,12 @@
                     <f:ajax execute="@this" render=":form:confirmDialogGroup" />
                 </h:commandLink>
 
-                <h:commandButton styleClass="btn btn--danger"
-                                 value="Delete"
-                                 action="#{taskListBean.confirmDelete}">
+                <h:commandLink styleClass="btn btn--danger"
+                               action="#{taskListBean.confirmDelete}">
+                    <h:outputText value="Delete" />
                     <f:ajax execute="@this"
                             render=":form:taskList :form:growl :form:confirmDialogGroup" />
-                </h:commandButton>
+                </h:commandLink>
             </div>
         </div>
 

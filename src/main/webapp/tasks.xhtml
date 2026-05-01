@@ -76,10 +76,11 @@
                 <h:panelGroup rendered="#{taskListBean.hasError and taskListBean.page == null}">
                     <div class="error-state" role="alert">
                         <p>Failed to load tasks: <h:outputText value="#{taskListBean.loadError}" /></p>
-                        <h:commandButton value="Retry" styleClass="btn btn--primary"
-                                         action="#{taskListBean.loadTasks}">
+                        <h:commandLink styleClass="btn btn--primary"
+                                       action="#{taskListBean.loadTasks}">
+                            <h:outputText value="Retry" />
                             <f:ajax execute="@form" render=":form" />
-                        </h:commandButton>
+                        </h:commandLink>
                     </div>
                 </h:panelGroup>
 
@@ -108,14 +109,14 @@
                                             <line x1="21" y1="21" x2="16.65" y2="16.65" />
                                         </svg>
                                     </span>
-                                    <input jsf:id="search"
-                                           type="search"
-                                           jsf:value="#{taskListBean.params.title}"
-                                           class="form-input filters__search-input"
-                                           placeholder="Search tasks…"
-                                           autocomplete="off"
-                                           aria-label="Search tasks by title"
-                                           onkeyup="taskflowDebounce('search', function(){ doSearch(); }, 350)" />
+                                    <h:inputText id="search"
+                                                 value="#{taskListBean.params.title}"
+                                                 styleClass="form-input filters__search-input"
+                                                 placeholder="Search tasks…"
+                                                 autocomplete="off"
+                                                 pt:type="search"
+                                                 pt:aria-label="Search tasks by title"
+                                                 onkeyup="taskflowDebounce('search', function(){ doSearch(); }, 350)" />
                                     <p:remoteCommand name="doSearch"
                                                      action="#{taskListBean.onSearchChanged}"
                                                      process="@(.filters__search-input)"
@@ -167,12 +168,12 @@
                         </div>
 
                         <!-- ░░ "+ New Task" button ░░ -->
-                        <h:commandButton id="btnCreate"
-                                         styleClass="btn btn--primary task-list__create-btn"
-                                         action="#{taskListBean.openCreate}">
+                        <h:commandLink id="btnCreate"
+                                       styleClass="btn btn--primary task-list__create-btn"
+                                       action="#{taskListBean.openCreate}">
                             <h:outputText value="+ New Task" />
                             <f:ajax execute="@this" render=":form:taskModalGroup" />
-                        </h:commandButton>
+                        </h:commandLink>
                     </div>
 
                     <!-- ───────────────────────────────────────────────────────
@@ -200,10 +201,11 @@
                                               value="Create your first task to get started." />
                             </p>
                             <h:panelGroup rendered="#{not taskListBean.hasFilters}" styleClass="empty-state__action">
-                                <h:commandButton value="Create task" styleClass="btn btn--primary"
-                                                 action="#{taskListBean.openCreate}">
+                                <h:commandLink styleClass="btn btn--primary"
+                                               action="#{taskListBean.openCreate}">
+                                    <h:outputText value="Create task" />
                                     <f:ajax execute="@this" render=":form:taskModalGroup" />
-                                </h:commandButton>
+                                </h:commandLink>
                             </h:panelGroup>
                         </div>
                     </h:panelGroup>
@@ -227,38 +229,35 @@
                          ─────────────────────────────────────────────────────── -->
                     <h:panelGroup rendered="#{taskListBean.totalPages gt 1}">
                         <nav class="pagination" aria-label="Pagination">
-                            <h:commandButton value="←"
-                                             styleClass="pagination__btn"
-                                             disabled="#{taskListBean.currentPage == 0}"
-                                             action="#{taskListBean.prevPage}"
-                                             pt:aria-label="Previous page"
->
+                            <h:commandLink styleClass="pagination__btn"
+                                           action="#{taskListBean.prevPage}"
+                                           pt:aria-label="Previous page"
+                                           disabled="#{taskListBean.currentPage == 0}">
+                                <h:outputText value="←" />
                                 <f:ajax execute="@this" render=":form:taskList" />
-                            </h:commandButton>
+                            </h:commandLink>
 
                             <ui:repeat value="#{taskListBean.visiblePages}" var="p">
                                 <span class="pagination__item">
                                     <h:outputText value="…" styleClass="pagination__ellipsis"
                                                   rendered="#{p == -1}" />
-                                    <h:commandButton value="#{p + 1}"
-                                                     rendered="#{p ge 0}"
-                                                     styleClass="pagination__btn #{p == taskListBean.currentPage ? 'pagination__btn--active' : ''}"
-                                                     action="#{taskListBean.goToPage(p)}"
-                                                     pt:aria-current="#{p == taskListBean.currentPage ? 'page' : ''}"
->
+                                    <h:commandLink rendered="#{p ge 0}"
+                                                   styleClass="pagination__btn #{p == taskListBean.currentPage ? 'pagination__btn--active' : ''}"
+                                                   action="#{taskListBean.goToPage(p)}"
+                                                   pt:aria-current="#{p == taskListBean.currentPage ? 'page' : ''}">
+                                        <h:outputText value="#{p + 1}" />
                                         <f:ajax execute="@this" render=":form:taskList" />
-                                    </h:commandButton>
+                                    </h:commandLink>
                                 </span>
                             </ui:repeat>
 
-                            <h:commandButton value="→"
-                                             styleClass="pagination__btn"
-                                             disabled="#{taskListBean.currentPage == taskListBean.totalPages - 1}"
-                                             action="#{taskListBean.nextPage}"
-                                             pt:aria-label="Next page"
->
+                            <h:commandLink styleClass="pagination__btn"
+                                           action="#{taskListBean.nextPage}"
+                                           pt:aria-label="Next page"
+                                           disabled="#{taskListBean.currentPage == taskListBean.totalPages - 1}">
+                                <h:outputText value="→" />
                                 <f:ajax execute="@this" render=":form:taskList" />
-                            </h:commandButton>
+                            </h:commandLink>
                         </nav>
                     </h:panelGroup>
                 </h:panelGroup>

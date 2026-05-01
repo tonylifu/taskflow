@@ -116,15 +116,14 @@
                             <f:ajax execute="@this" render=":form:taskModalGroup" />
                         </h:commandLink>
 
-                        <h:commandButton styleClass="btn btn--primary"
-                                         value="#{taskListBean.submitting
-                                                  ? 'Saving…'
-                                                  : (taskListBean.modalEditMode ? 'Update Task' : 'Create Task')}"
-                                         action="#{taskListBean.submitForm}"
-                                         disabled="#{taskListBean.submitting}">
+                        <h:commandLink styleClass="btn btn--primary"
+                                       action="#{taskListBean.submitForm}">
+                            <h:outputText value="#{taskListBean.submitting
+                                                   ? 'Saving…'
+                                                   : (taskListBean.modalEditMode ? 'Update Task' : 'Create Task')}" />
                             <f:ajax execute="@(.task-form :input)"
                                     render=":form:taskList :form:growl :form:taskModalGroup" />
-                        </h:commandButton>
+                        </h:commandLink>
                     </div>
 
                 </h:panelGroup>
