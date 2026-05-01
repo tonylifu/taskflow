@@ -29,27 +29,27 @@ public class ViewHelper {
         return ALL_STATUSES;
     }
 
-    public String formatDate(OffsetDateTime when) {
+    public String formatDate(final OffsetDateTime when) {
         return DateUtil.formatDate(when);
     }
 
-    public String formatDateTime(OffsetDateTime when) {
+    public String formatDateTime(final OffsetDateTime when) {
         return DateUtil.formatDateTime(when);
     }
 
-    public String formatRelative(OffsetDateTime when) {
+    public String formatRelative(final OffsetDateTime when) {
         return DateUtil.formatRelative(when);
     }
 
-    public boolean isOverdue(Task t) {
+    public boolean isOverdue(final Task t) {
         return t != null && DateUtil.isOverdue(t.getDueDate());
     }
 
-    public boolean isDueSoon(Task t) {
+    public boolean isDueSoon(final Task t) {
         return t != null && DateUtil.isDueSoon(t.getDueDate());
     }
 
-    public String dueClass(Task t) {
+    public String dueClass(final Task t) {
         if (t == null || t.getDueDate() == null) return "task-card__due task-card__due--none";
         StringBuilder sb = new StringBuilder("task-card__due");
         if (DateUtil.isOverdue(t.getDueDate()))      sb.append(" task-card__due--overdue");

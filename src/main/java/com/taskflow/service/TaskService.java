@@ -54,21 +54,24 @@ public class TaskService {
 
     private static final Logger log = LoggerFactory.getLogger(TaskService.class);
 
-    private static final String DEFAULT_BASE_URL   = "http://hmcts-task-manager:8080/api/v1";
-    private static final long   CONNECT_TIMEOUT_S  = 5;
-    private static final long   READ_TIMEOUT_S     = 15;
+    private static final String DEFAULT_BASE_URL = "http://hmcts-task-manager:8080/api/v1";
+    private static final long CONNECT_TIMEOUT_S = 5;
+    private static final long READ_TIMEOUT_S = 15;
 
     // Reused TypeReferences — created once, used per response. Cheap to reuse,
     // expensive to construct repeatedly (each one walks the generic tree).
     private static final TypeReference<ApiResponse<Task>> TASK_REF =
-            new TypeReference<>() {};
+            new TypeReference<>() {
+            };
     private static final TypeReference<ApiResponse<PagedResponse<Task>>> PAGE_REF =
-            new TypeReference<>() {};
+            new TypeReference<>() {
+            };
     private static final TypeReference<ApiResponse<Object>> OBJECT_REF =
-            new TypeReference<>() {};
+            new TypeReference<>() {
+            };
 
-    private Client     httpClient;
-    private WebTarget  tasksTarget;
+    private Client httpClient;
+    private WebTarget tasksTarget;
     private ObjectMapper mapper;
 
     // ─── Lifecycle ───────────────────────────────────────────────────────────
@@ -214,12 +217,12 @@ public class TaskService {
         Map<String, Object> qp = Map.of();
         // Explicit conditional appends — Map.of() is just here for readability;
         // real appends below avoid null/blank values to keep URLs clean.
-        if (p.getStatus()    != null)                                    t = t.queryParam("status",    p.getStatus().name());
-        if (p.getTitle()     != null && !p.getTitle().isBlank())         t = t.queryParam("title",     p.getTitle());
-        if (p.getPage()      != null)                                    t = t.queryParam("page",      p.getPage());
-        if (p.getSize()      != null)                                    t = t.queryParam("size",      p.getSize());
-        if (p.getSortBy()    != null)                                    t = t.queryParam("sortBy",    p.getSortBy());
-        if (p.getDirection() != null)                                    t = t.queryParam("direction", p.getDirection());
+        if (p.getStatus() != null) t = t.queryParam("status", p.getStatus().name());
+        if (p.getTitle() != null && !p.getTitle().isBlank()) t = t.queryParam("title", p.getTitle());
+        if (p.getPage() != null) t = t.queryParam("page", p.getPage());
+        if (p.getSize() != null) t = t.queryParam("size", p.getSize());
+        if (p.getSortBy() != null) t = t.queryParam("sortBy", p.getSortBy());
+        if (p.getDirection() != null) t = t.queryParam("direction", p.getDirection());
         return t;
     }
 
@@ -254,10 +257,10 @@ public class TaskService {
                                               ProcessingException e) {
         Throwable cause = e.getCause();
         String reason;
-        if (cause instanceof ConnectException)        reason = "connection refused";
+        if (cause instanceof ConnectException) reason = "connection refused";
         else if (cause instanceof UnknownHostException) reason = "unknown host";
         else if (cause instanceof SocketTimeoutException) reason = "timeout";
-        else                                          reason = e.getMessage();
+        else reason = e.getMessage();
 
         log.warn("Network failure on {} {}: {}", method, target.getUri(), reason);
         return new TaskApiException(
