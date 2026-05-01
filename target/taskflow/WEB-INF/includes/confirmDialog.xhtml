@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough">
+
+    <!--
+        Delete confirmation — mirrors src/components/ui/ConfirmDialog.tsx.
+    -->
+
+    <p:dialog widgetVar="confirmDialogWidget"
+              id="confirmDialog"
+              modal="true"
+              draggable="false"
+              resizable="false"
+              closable="false"
+              dismissableMask="true"
+              showHeader="false"
+              responsive="true"
+              width="420">
+
+        <div class="modal modal--sm">
+            <h2 id="confirm-title" class="modal__title">Delete task?</h2>
+            <p class="modal__message">
+                "<h:outputText value="#{taskListBean.deletingTask.title}" />" will be permanently deleted.
+            </p>
+            <div class="modal__actions">
+                <h:commandLink styleClass="btn btn--ghost"
+                               value="Cancel"
+                               action="#{taskListBean.cancelDelete}">
+                    <f:ajax execute="@this" render=":form:confirmDialogGroup" />
+                </h:commandLink>
+
+                <h:commandButton styleClass="btn btn--danger"
+                                 value="Delete"
+                                 action="#{taskListBean.confirmDelete}">
+                    <f:ajax execute="@this"
+                            render=":form:taskList :form:growl :form:confirmDialogGroup" />
+                </h:commandButton>
+            </div>
+        </div>
+
+    </p:dialog>
+
+</ui:composition>

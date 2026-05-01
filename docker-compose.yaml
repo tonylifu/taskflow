@@ -1,0 +1,33 @@
+services:
+  hmcts-task-manager-fe:
+    mem_limit: 2048m
+    mem_reservation: 1024m
+    cpus: '1.5'
+    build: .
+    image: secura-ui:wildfly36
+    container_name: hmcts-task-manager-fe-local
+    env_file:
+      - .env
+    expose:
+      - "8080"
+    ports:
+      - "8087:8080"
+    environment:
+      - JAVA_OPTS=-Xms1024m -Xmx1536m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/heap-dump.hprof -Djava.net.preferIPv4Stack=true
+      - JBOSS_OPTS=-Djboss.bind.address=0.0.0.0 -Djboss.bind.address.management=0.0.0.0
+      - JAVAX_FACES_PROJECT_STAGE=Production
+      - JAVAX_FACES_STATE_SAVING_METHOD=server
+      - JAVAX_FACES_PARTIAL_STATE_SAVING=true
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/taskflow/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    restart: unless-stopped
+    networks:
+      task-network:
+
+networks:
+  task-network:
+    external: true

@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="primefaces"
+                xmlns:pt="jakarta.faces.passthrough">
+
+    <!--
+        Create / Edit modal — mirrors src/components/task/TaskModal.tsx and TaskForm.tsx.
+
+        Uses p:dialog for the overlay/centering/escape-handling; the body keeps
+        the React .modal__header / .modal__body markup so the design system still
+        owns the visuals.
+    -->
+
+    <p:dialog widgetVar="taskModalWidget"
+              id="taskModalDialog"
+              modal="true"
+              draggable="false"
+              resizable="false"
+              closable="false"
+              dismissableMask="true"
+              showHeader="false"
+              styleClass="taskflow-modal-shell"
+              responsive="true"
+              width="540">
+
+        <div class="modal">
+            <!-- Modal header -->
+            <div class="modal__header">
+                <h2 id="task-modal-title" class="modal__title">
+                    <h:outputText value="#{taskListBean.modalEditMode ? 'Edit Task' : 'Create Task'}" />
+                </h2>
+                <h:commandLink styleClass="modal__close"
+                               value="✕"
+                               pt:aria-label="Close modal"
+                               action="#{taskListBean.closeModal}">
+                    <f:ajax execute="@this" render=":form:taskModalGroup" />
+                </h:commandLink>
+            </div>
+
+            <!-- Modal body — the form -->
+            <div class="modal__body">
+                <h:panelGroup id="taskFormPanel" layout="block" styleClass="task-form">
+
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="form_title" class="form-label">
+                            Title <span class="form-required">*</span>
+                        </label>
+                        <h:inputText id="form_title"
+                                     value="#{taskListBean.formTitle}"
+                                     required="true"
+                                     requiredMessage="Title is required"
+                                     validatorMessage="Title must be 255 characters or fewer"
+                                     styleClass="form-input"
+                                     pt:placeholder="Enter task title"
+                                     pt:maxlength="255">
+                            <f:validateLength maximum="255" />
+                        </h:inputText>
+                        <h:message for="form_title" styleClass="form-error" />
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="form_description" class="form-label">Description</label>
+                        <h:inputTextarea id="form_description"
+                                         value="#{taskListBean.formDescription}"
+                                         styleClass="form-input form-input--textarea"
+                                         rows="4"
+                                         pt:placeholder="Optional description…"
+                                         pt:maxlength="5000"
+                                         validatorMessage="Description must be 5000 characters or fewer">
+                            <f:validateLength maximum="5000" />
+                        </h:inputTextarea>
+                        <h:message for="form_description" styleClass="form-error" />
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label for="form_status" class="form-label">
+                            Status <span class="form-required">*</span>
+                        </label>
+                        <h:selectOneMenu id="form_status"
+                                         value="#{taskListBean.formStatus}"
+                                         required="true"
+                                         requiredMessage="Status is required"
+                                         styleClass="form-input form-select">
+                            <f:selectItems value="#{viewHelper.statuses}"
+                                           var="s" itemValue="#{s}" itemLabel="#{s.label}" />
+                        </h:selectOneMenu>
+                        <h:message for="form_status" styleClass="form-error" />
+                    </div>
+
+                    <!-- Due Date -->
+                    <div class="form-group">
+                        <label for="form_dueDate" class="form-label">Due Date</label>
+                        <p:datePicker id="form_dueDate"
+                                      value="#{taskListBean.formDueDate}"
+                                      showTime="true" showSeconds="false"
+                                      pattern="yyyy-MM-dd HH:mm"
+                                      styleClass="form-input"
+                                      mindate="#{taskListBean.minDueDate}"
+                                      placeholder="Optional"
+                                      showButtonBar="true"
+                                      appendTo="@(body)"
+                                      panelStyleClass="taskflow-datepicker" />
+                        <h:message for="form_dueDate" styleClass="form-error" />
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="form-actions">
+                        <h:commandLink styleClass="btn btn--ghost"
+                                       value="Cancel"
+                                       action="#{taskListBean.closeModal}">
+                            <f:ajax execute="@this" render=":form:taskModalGroup" />
+                        </h:commandLink>
+
+                        <h:commandButton styleClass="btn btn--primary"
+                                         value="#{taskListBean.submitting
+                                                  ? 'Saving…'
+                                                  : (taskListBean.modalEditMode ? 'Update Task' : 'Create Task')}"
+                                         action="#{taskListBean.submitForm}"
+                                         disabled="#{taskListBean.submitting}">
+                            <f:ajax execute="@(.task-form :input)"
+                                    render=":form:taskList :form:growl :form:taskModalGroup" />
+                        </h:commandButton>
+                    </div>
+
+                </h:panelGroup>
+            </div>
+        </div>
+
+    </p:dialog>
+
+</ui:composition>

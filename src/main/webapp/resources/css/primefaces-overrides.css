@@ -1,0 +1,186 @@
+/* ============================================================
+   PRIMEFACES OVERRIDES
+   These rules force PrimeFaces 15 widgets to inherit the
+   TaskFlow design tokens defined in taskflow.css, so the
+   converted UI looks identical to the React original.
+   Loaded AFTER taskflow.css so cascade order is correct.
+   ============================================================ */
+
+/* ─── Hide PrimeFaces growl while we use plain react-toast-style markup ─── */
+
+/* Reposition + restyle the growl to match the React `<Toaster position="top-right">` */
+.ui-growl {
+    top: 20px !important;
+    right: 20px !important;
+}
+.ui-growl-item-container {
+    background: var(--surface-2) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    box-shadow: var(--shadow-card) !important;
+    opacity: 0.98 !important;
+}
+.ui-growl-item-container .ui-growl-title,
+.ui-growl-item-container .ui-growl-message,
+.ui-growl-item-container .ui-growl-message p {
+    color: var(--text-primary) !important;
+}
+.ui-growl-item-container.ui-growl-message-info {
+    border-color: rgba(74, 222, 128, 0.45) !important;
+}
+.ui-growl-item-container.ui-growl-message-error {
+    border-color: rgba(248, 113, 113, 0.45) !important;
+}
+
+/* ─── p:selectOneMenu — used for status & sort filters and the form status ─── */
+
+.ui-selectonemenu {
+    width: 100% !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-primary) !important;
+    box-shadow: none !important;
+}
+.ui-selectonemenu .ui-selectonemenu-label,
+.ui-selectonemenu-label {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+    border: 0 !important;
+    padding: 0.55rem 0.85rem !important;
+    font-family: var(--font-body) !important;
+    font-size: 0.875rem !important;
+}
+.ui-selectonemenu .ui-selectonemenu-trigger {
+    background: transparent !important;
+    border: 0 !important;
+    color: var(--text-muted) !important;
+}
+.ui-selectonemenu:not(.ui-state-disabled):hover {
+    border-color: var(--slate-600) !important;
+}
+.ui-selectonemenu:focus,
+.ui-selectonemenu.ui-state-focus,
+.ui-selectonemenu:focus-within {
+    outline: none !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15) !important;
+}
+
+/* The dropdown panel itself (rendered to <body>) */
+.ui-selectonemenu-panel {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: var(--shadow-modal) !important;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list {
+    background: transparent !important;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list-item {
+    color: var(--text-primary) !important;
+    padding: 0.6rem 0.85rem !important;
+    font-size: 0.875rem !important;
+    background: transparent !important;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list-item.ui-state-highlight,
+.ui-selectonemenu-panel .ui-selectonemenu-list-item:hover {
+    background: var(--surface-3) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ─── p:dialog — used for both the task modal and the delete confirm ─── */
+
+/* Push the overlay above PF default z-index so backdrop-filter etc. line up */
+.ui-widget-overlay,
+.ui-dialog-mask {
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(4px) !important;
+}
+.ui-dialog {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-modal) !important;
+    color: var(--text-primary) !important;
+    /* Hide the default PF titlebar — we render our own header inside the body. */
+}
+.ui-dialog .ui-dialog-titlebar {
+    display: none !important;
+}
+.ui-dialog .ui-dialog-content {
+    background: var(--surface-2) !important;
+    color: var(--text-primary) !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+/* ─── p:datePicker / p:calendar — used for Due Date in the form ─── */
+
+.ui-datepicker, .ui-calendar {
+    width: 100% !important;
+}
+.ui-calendar input,
+.ui-datepicker-trigger + input,
+.ui-inputfield.hasDatepicker,
+.ui-datepicker .ui-inputtext {
+    /* When p:datePicker is rendered as an input, force the .form-input look. */
+    width: 100% !important;
+}
+/* The popup panel */
+.ui-datepicker.ui-widget {
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-primary) !important;
+    box-shadow: var(--shadow-modal) !important;
+}
+.ui-datepicker .ui-datepicker-header {
+    background: var(--surface-3) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border) !important;
+}
+.ui-datepicker td > a,
+.ui-datepicker td > span {
+    color: var(--text-primary) !important;
+}
+.ui-datepicker td > a.ui-state-active,
+.ui-datepicker td > a:hover {
+    background: var(--accent) !important;
+    color: var(--slate-950) !important;
+}
+
+/* ─── PrimeFaces InputText / InputTextarea inherit our .form-input styles. ─── */
+/* Because we already give the field the .form-input class, no override is
+   required beyond removing PF's own padding/border defaults: */
+.ui-inputfield, .ui-inputtext, .ui-inputtextarea {
+    box-shadow: none !important;
+}
+.ui-inputfield:focus,
+.ui-inputtext:focus,
+.ui-inputtextarea:focus {
+    outline: none !important;
+}
+
+/* ─── PrimeFaces buttons defer to .btn classes; suppress PF's chrome ─── */
+.ui-button {
+    box-shadow: none !important;
+}
+
+/* ─── Status menu visibility toggle ─────────────────────────────────────────
+   React rendered the menu only when open; in JSF we render it always and
+   hide it by default, revealing it with .is-open (toggled in taskflow.js). */
+.status-menu { display: none; }
+.status-menu.is-open { display: block; }
+
+/* ─── Utility: the React app uses `display: none` to truly hide things,
+        but PrimeFaces renders dialogs as hidden via attributes — make sure
+        our content slots inside dialog bodies don't acquire stray padding. ─── */
+.ui-dialog .modal {
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    background: transparent !important;
+}
