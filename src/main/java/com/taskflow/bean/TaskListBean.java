@@ -15,12 +15,14 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,31 +52,48 @@ public class TaskListBean implements Serializable {
 
     private static final Logger log = LoggerFactory.getLogger(TaskListBean.class);
 
-    @Inject private transient TaskService taskService;
+    @Inject
+    private transient TaskService taskService;
 
     // ─── Filter / paging state (mirrors useState<TaskQueryParams>) ───────────
 
+    @Getter
     private final TaskQueryParams params = new TaskQueryParams();
 
     // ─── Data state (mirrors React Query result) ─────────────────────────────
 
+    @Getter
     private PagedResponse<Task> page;
+    @Getter
     private boolean loading;
+    @Getter
     private String loadError;
 
     // ─── Modal state (mirrors useState for editing/deleting) ─────────────────
-
+    @Getter
     private boolean modalOpen;
+    @Getter
     private boolean modalEditMode;
-    private Task editingTask;            // null when creating
-    private Task deletingTask;           // non-null while delete confirm is open
+    @Getter
+    private Task editingTask;
+    @Getter
+    private Task deletingTask;
+    @Getter @Setter
     private boolean submitting;
 
     // Form fields for create/edit (drives the dialog inputs)
+    @Getter
+    @Setter
     private String formTitle;
+    @Getter
+    @Setter
     private String formDescription;
+    @Getter
+    @Setter
     private TaskStatus formStatus = TaskStatus.TODO;
-    private OffsetDateTime formDueDate;
+    @Getter
+    @Setter
+    private LocalDateTime formDueDate;
 
     // ─── Lifecycle ───────────────────────────────────────────────────────────
 
@@ -106,14 +125,23 @@ public class TaskListBean implements Serializable {
 
     // ─── Filter handlers ─────────────────────────────────────────────────────
 
-    /** Called when the search input changes (debounced via p:remoteCommand on the client). */
+    /**
+     * Called when the search input changes (debounced via p:remoteCommand on the client).
+     */
     public void onSearchChanged() {
         params.setPage(0);
         loadTasks();
     }
 
-    public void onStatusChanged()    { params.setPage(0); loadTasks(); }
-    public void onDirectionChanged() { params.setPage(0); loadTasks(); }
+    public void onStatusChanged() {
+        params.setPage(0);
+        loadTasks();
+    }
+
+    public void onDirectionChanged() {
+        params.setPage(0);
+        loadTasks();
+    }
 
     public void clearFilters() {
         params.setStatus(null);
@@ -131,8 +159,13 @@ public class TaskListBean implements Serializable {
         loadTasks();
     }
 
-    public void prevPage() { goToPage(params.getPage() - 1); }
-    public void nextPage() { goToPage(params.getPage() + 1); }
+    public void prevPage() {
+        goToPage(params.getPage() - 1);
+    }
+
+    public void nextPage() {
+        goToPage(params.getPage() + 1);
+    }
 
     /**
      * The compact page-numbers list shown in the React Pagination component:
@@ -177,7 +210,9 @@ public class TaskListBean implements Serializable {
         formTitle = t.getTitle();
         formDescription = t.getDescription();
         formStatus = t.getStatus();
-        formDueDate = t.getDueDate();
+        formDueDate = t.getDueDate() == null
+                ? null
+                : t.getDueDate().atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
         modalOpen = true;
         showTaskDialog();
     }
@@ -212,7 +247,9 @@ public class TaskListBean implements Serializable {
             payload.setTitle(formTitle);
             payload.setDescription(blankToNull(formDescription));
             payload.setStatus(formStatus);
-            payload.setDueDate(formDueDate);
+            payload.setDueDate(formDueDate == null
+                    ? null
+                    : formDueDate.atZone(ZoneId.systemDefault()).toOffsetDateTime());
 
             if (modalEditMode && editingTask != null) {
                 taskService.update(editingTask.getId(), payload);
@@ -291,50 +328,44 @@ public class TaskListBean implements Serializable {
 
     // ─── View getters/setters ────────────────────────────────────────────────
 
-    public TaskQueryParams getParams() { return params; }
+    public List<Task> getTasks() {
+        return page == null ? List.of() : page.getContent();
+    }
 
-    public PagedResponse<Task> getPage()   { return page; }
-    public List<Task> getTasks()           { return page == null ? List.of() : page.getContent(); }
-    public long getTotalElements()         { return page == null ? 0L : page.getTotalElements(); }
-    public int getTotalPages()             { return page == null ? 0  : page.getTotalPages(); }
-    public int getCurrentPage()            { return params.getPage() == null ? 0 : params.getPage(); }
-    public boolean isHasFilters()          { return params.hasFilters(); }
-    public boolean isNoTasks()             { return getTasks().isEmpty(); }
+    public long getTotalElements() {
+        return page == null ? 0L : page.getTotalElements();
+    }
 
-    public boolean isLoading()      { return loading; }
-    public String  getLoadError()   { return loadError; }
-    public boolean isHasError()     { return loadError != null; }
+    public int getTotalPages() {
+        return page == null ? 0 : page.getTotalPages();
+    }
 
-    public boolean isModalOpen()         { return modalOpen; }
-    public boolean isModalEditMode()     { return modalEditMode; }
-    public boolean isSubmitting()        { return submitting; }
-    public boolean isDeleteDialogOpen()  { return deletingTask != null; }
-    public Task    getDeletingTask()     { return deletingTask; }
+    public int getCurrentPage() {
+        return params.getPage() == null ? 0 : params.getPage();
+    }
 
-    public String getFormTitle() { return formTitle; }
-    public void   setFormTitle(String formTitle) { this.formTitle = formTitle; }
+    public boolean isHasFilters() {
+        return params.hasFilters();
+    }
 
-    public String getFormDescription() { return formDescription; }
-    public void   setFormDescription(String formDescription) { this.formDescription = formDescription; }
+    public boolean isNoTasks() {
+        return getTasks().isEmpty();
+    }
 
-    public TaskStatus getFormStatus() { return formStatus; }
-    public void       setFormStatus(TaskStatus formStatus) { this.formStatus = formStatus; }
+    public boolean isHasError() {
+        return loadError != null;
+    }
+
+    public boolean isDeleteDialogOpen() {
+        return deletingTask != null;
+    }
+
 
     /**
-     * Form-side representation of the Due Date input.
-     *
-     * <p>The React app used <code>&lt;input type="datetime-local"&gt;</code> which produces a
-     * naive local-time string and then attached the browser's offset on submit
-     * (<code>localDateTimeToISO</code>). PrimeFaces' p:datePicker bound to
-     * {@link OffsetDateTime} does the equivalent: parsing/displaying in the JVM's
-     * default zone and emitting an OffsetDateTime when read.
+     * Used by p:datePicker minDate for the Due Date input.
      */
-    public OffsetDateTime getFormDueDate() { return formDueDate; }
-    public void           setFormDueDate(OffsetDateTime formDueDate) { this.formDueDate = formDueDate; }
-
-    /** Used by p:datePicker minDate for the Due Date input. */
-    public java.time.LocalDateTime getMinDueDate() {
-        return java.time.LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1);
+    public LocalDateTime getMinDueDate() {
+        return LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1);
     }
 
 }

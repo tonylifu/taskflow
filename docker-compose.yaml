@@ -19,7 +19,7 @@ services:
       - JAVAX_FACES_STATE_SAVING_METHOD=server
       - JAVAX_FACES_PARTIAL_STATE_SAVING=true
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/taskflow/api/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/taskflow-frontend/api/health" ]
       interval: 30s
       timeout: 10s
       retries: 3

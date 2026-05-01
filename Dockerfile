@@ -26,7 +26,7 @@ FROM tlifu75/secura:wildfly-java21-1.0.0
 
 ENV WILDFLY_HOME=/opt/wildfly \
     DEPLOYMENT_DIR=/opt/wildfly/standalone/deployments \
-    WAR_NAME=taskflow.war
+    WAR_NAME=taskflow-frontend.war
 
 COPY --from=build /build/target/${WAR_NAME} ${DEPLOYMENT_DIR}/
 

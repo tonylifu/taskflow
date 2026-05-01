@@ -1,86 +1,45 @@
-# --- Java ---
-*.class
+# Maven
+/target/
+
+# Gradle
+/build/
+.gradle/
+
+# Logs
 *.log
+
+# IDEs
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled class files
+*.class
+
+# Package files
 *.jar
 *.war
 *.ear
 
-# --- Maven ---
-/target/
-!.mvn/wrapper/maven-wrapper.jar
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.properties
-mvnw
-mvnw.cmd
+# Temporary files
+*.tmp
+*.swp
 
-# --- NetBeans ---
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Environment files
+.env
 
-# --- IntelliJ IDEA ---
-.idea/
-*.iws
-*.iml
-*.ipr
-out/
-
-# --- Eclipse ---
-.project
-.classpath
-.settings/
-bin/
-.tmp/
-
-# --- VS Code ---
-.vscode/
-
-# --- OS Files ---
-.DS_Store
-Thumbs.db
-
-# --- Build tools ---
-/build/
-/tmp/
-
-# --- Logs ---
-*.log
-/logs/
-/*.log
-
-# --- Jakarta Faces / PrimeFaces specific (optional) ---
-# If you're using JSF state saving on disk (RARE in modern setups):
-jsf-state/
-
-# --- WildFly / Payara / Tomcat server deploy artifacts ---
-*.deployment
-*.deployed
-*.undeployed
-*.failed
-*.dodeploy
-*.war.*
-*.ear.*
-
-# --- Database / temp files ---
-*.h2.db
-*.mv.db
-*.sql
-*.db
-*.db-journal
-
-# --- Environment-specific files ---
-#.env
-#.env.*
-
-# --- JetBrains user-specific files ---
-*.shelf/
-.idea_modules/
-
-# --- Others ---
-node_modules/     # if using JS/TS frontend alongside
-package-lock.json # if using NPM
-yarn.lock         # if using Yarn
-wildfly/
+# Test output
+/test-output/
 target/
