@@ -116,10 +116,13 @@
                                                  autocomplete="off"
                                                  pt:type="search"
                                                  pt:aria-label="Search tasks by title"
-                                                 onkeyup="taskflowDebounce('search', function(){ doSearch(); }, 350)" />
+                                                 onkeyup="taskflowDebounce('search', function(){ doSearch(); }, 350)">
+                                        <f:ajax event="change" execute="@this" render=":form:taskList"
+                                                listener="#{taskListBean.onSearchChanged}" />
+                                    </h:inputText>
                                     <p:remoteCommand name="doSearch"
                                                      action="#{taskListBean.onSearchChanged}"
-                                                     process="@(.filters__search-input)"
+                                                     process="search"
                                                      update=":form:taskList" />
                                 </div>
 
