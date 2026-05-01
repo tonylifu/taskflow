@@ -47,3 +47,16 @@
         }
     });
 })();
+
+
+// Auto-close datepicker after both date AND time are picked.
+// Lives outside the widget so we don't fight PrimeFaces' own lifecycle.
+document.addEventListener('click', function (e) {
+    // Clicking a date cell in the calendar grid
+    if (e.target.closest('.taskflow-datepicker .ui-datepicker-calendar a')) {
+        // Give PF a tick to commit the value, then close.
+        setTimeout(function () {
+            if (window.PF && PF('dueDatePicker')) PF('dueDatePicker').hide();
+        }, 100);
+    }
+});

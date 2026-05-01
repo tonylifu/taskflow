@@ -282,3 +282,90 @@ a.btn-icon {
     align-items: center !important;
     text-decoration: none !important;
 }
+
+
+/* ─── Date picker panel — responsive sizing & dark theme parity ─────────── */
+
+.taskflow-datepicker.ui-datepicker {
+    /* Sensible cap — wide enough for the time controls, narrow enough that
+       it doesn't engulf the viewport on a 1280-wide laptop. */
+    width: auto !important;
+    min-width: 280px !important;
+    max-width: 340px !important;
+    font-size: 0.85rem !important;
+}
+
+.taskflow-datepicker .ui-datepicker-calendar td {
+    padding: 0.1rem !important;
+}
+
+.taskflow-datepicker .ui-datepicker-calendar td > a,
+.taskflow-datepicker .ui-datepicker-calendar td > span {
+    width: 2rem !important;
+    height: 2rem !important;
+    line-height: 2rem !important;
+    font-size: 0.8rem !important;
+}
+
+/* Time picker row — keep the spinners compact, vertically centered. */
+.taskflow-datepicker .ui-timepicker {
+    padding: 0.5rem 0 !important;
+    border-top: 1px solid var(--border) !important;
+}
+.taskflow-datepicker .ui-timepicker .ui-hour-picker,
+.taskflow-datepicker .ui-timepicker .ui-minute-picker,
+.taskflow-datepicker .ui-timepicker .ui-second-picker,
+.taskflow-datepicker .ui-timepicker .ui-separator {
+    margin: 0 0.15rem !important;
+}
+.taskflow-datepicker .ui-timepicker span {
+    font-size: 0.95rem !important;
+}
+
+/* Today / Clear button bar at the bottom. */
+.taskflow-datepicker .ui-datepicker-buttonbar {
+    padding: 0.5rem !important;
+    border-top: 1px solid var(--border) !important;
+}
+.taskflow-datepicker .ui-datepicker-buttonbar .ui-button {
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.8rem !important;
+    background: var(--surface-3) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border) !important;
+}
+.taskflow-datepicker .ui-datepicker-buttonbar .ui-button:hover {
+    background: var(--surface-2) !important;
+}
+
+/* Mobile — let it stretch to a sensible portion of the screen, not full-bleed. */
+@media (max-width: 480px) {
+    .taskflow-datepicker.ui-datepicker {
+        max-width: calc(100vw - 2rem) !important;
+        min-width: 0 !important;
+    }
+}
+
+/* The trigger icon button next to the input (showIcon="true"). */
+.ui-datepicker-trigger.ui-button {
+    background: var(--surface-3) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 0 !important;
+    color: var(--text-muted) !important;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+}
+.ui-datepicker-trigger.ui-button:hover {
+    background: var(--surface-2) !important;
+    color: var(--text-primary) !important;
+}
+
+/* When showIcon=true, p:datePicker wraps the input and trigger in
+   .ui-calendar — flatten the wrapper so it sits flush in the form-group. */
+.form-group .ui-calendar {
+    display: flex !important;
+    width: 100% !important;
+}
+.form-group .ui-calendar > input {
+    flex: 1 1 auto !important;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
+}
