@@ -96,15 +96,22 @@
                     <div class="form-group">
                         <label for="form_dueDate" class="form-label">Due Date</label>
                         <p:datePicker id="form_dueDate"
+                                      widgetVar="dueDatePicker"
                                       value="#{taskListBean.formDueDate}"
-                                      showTime="true" showSeconds="false"
+                                      showTime="true"
+                                      showSeconds="false"
+                                      hourFormat="24"
+                                      stepMinute="15"
                                       pattern="yyyy-MM-dd HH:mm"
                                       styleClass="form-input"
                                       mindate="#{taskListBean.minDueDate}"
-                                      placeholder="Optional"
+                                      placeholder="Optional · YYYY-MM-DD HH:mm"
                                       showButtonBar="true"
+                                      showIcon="true"
                                       appendTo="@(body)"
-                                      panelStyleClass="taskflow-datepicker" />
+                                      panelStyleClass="taskflow-datepicker"
+                                      touchUI="false"
+                                      keepInvalid="false" />
                         <h:message for="form_dueDate" styleClass="form-error" />
                     </div>
 
