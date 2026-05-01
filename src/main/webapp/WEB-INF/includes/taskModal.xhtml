@@ -121,7 +121,7 @@
                             <h:outputText value="#{taskListBean.submitting
                                                    ? 'Saving…'
                                                    : (taskListBean.modalEditMode ? 'Update Task' : 'Create Task')}" />
-                            <f:ajax execute="@(.task-form :input)"
+                            <f:ajax execute="taskFormPanel"
                                     render=":form:taskList :form:growl :form:taskModalGroup" />
                         </h:commandLink>
                     </div>
